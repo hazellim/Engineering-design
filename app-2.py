@@ -1,10 +1,10 @@
-import kivy
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.slider import Slider
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.utils import get_color_from_hex
+
 import requests
 
 # Define the URL of your Arduino server
@@ -12,20 +12,24 @@ webhook_url = 'http://your_arduino_ip:your_port/webhook'
 
 class ServoControlApp(App):
     def build(self):
-        layout = BoxLayout(orientation='vertical')
+        layout = BoxLayout(orientation='vertical', padding = 20, spacing = 20, size_hint =(None, None))
+        layout.width = 300
+        layout.height = 300
+        background = Image(source='sun.jpg')
 
-        self.label = Label(text='Control the Servos')
-        self.slider = Slider(min=0, max=180, value=90)
-        # self.button = Button(text='Send Rotation')
-        self.reset_button = Button(text = 'Reset Louvers', background_color = get_color_from_hex('#FF0000'))
+        self.label = Label(text='Control the Servos', size_hint = (None, None), size = (300, 50), halign = 'center')
+        self.slider = Slider(min=0, max=180, value=90, step = 1, size_hint = (None, None), size = (300, 50))
+        self.reset_button = Button(text = 'Reset Louvers', size_hint = (None, None), size = (300, 50), background_color = get_color_from_hex('#FF0000'))
 
         self.slider.bind(value=self.on_slider_change)
-        # self.button.bind(on_press=self.send_rotation_data)
         self.reset_button.bind(on_press = self.reset_louvers)
+
+        background = Image(source='background.jpg')
 
         layout.add_widget(self.label)
         layout.add_widget(self.slider)
-        # layout.add_widget(self.button)
+        layout.add_widget(self.reset_button)
+        layout.add_widget(background)
 
         self.user_active = False
 
@@ -43,7 +47,6 @@ class ServoControlApp(App):
     def send_rotation_data(self):
         rotation = self.slider.value
         data = {'servo_position': rotation}
-        response = requests.post(webhook_url, json = data)
 
         if self.user_active:
             response = requests.post(webhook_url, json=data)
