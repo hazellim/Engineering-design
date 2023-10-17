@@ -1,55 +1,56 @@
+import kivy
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
-import serial
-import requests
+# import serial
+# import requests
 
 # Arduino communication setup
-arduino_port = '/dev/ttyUSB0'  # Adjust the port to your Arduino's port
-ser = serial.Serial(arduino_port, 9600)
+# arduino_port = '/dev/ttyUSB0'  # Adjust the port to your Arduino's port
+# ser = serial.Serial(arduino_port, 9600)
 
-def read_arduino_data():
-   while True:
-       arduino_data = ser.readline().decode().strip()
-       if arduino_data:
-           return int(arduino_data)  # Convert the received data to an integer
+# def read_arduino_data():
+#    while True:
+#        arduino_data = ser.readline().decode().strip()
+#        if arduino_data:
+#            return int(arduino_data)  # Convert the received data to an integer
 
-# Function to interact with the API using the Arduino data
-def send_api_request(arduino_data):
-    api_url = 'https://example.com/api'  # Replace with the actual API endpoint
-    api_key = 'YOUR_API_KEY'  # Replace with your API key
+# # Function to interact with the API using the Arduino data
+# def send_api_request(arduino_data):
+#     api_url = 'https://example.com/api'  # Replace with the actual API endpoint
+#     api_key = 'YOUR_API_KEY'  # Replace with your API key
 
-    headers = {
-        'Authorization': f'Bearer {api_key}'
-    }
+#     headers = {
+#         'Authorization': f'Bearer {api_key}'
+#     }
 
-    # Prepare the data to send to the API, including the Arduino data
-    data = {
-        'arduino_data': arduino_data
-    }
+#     # Prepare the data to send to the API, including the Arduino data
+#     data = {
+#         'arduino_data': arduino_data
+#     }
 
-    try:
-        response = requests.post(api_url, headers=headers, json=data)
-        if response.status_code == 200:
-            # API request was successful
-            api_response = response.json()
-            # Process the API response as needed
-            print("API Response:", api_response)
-        else:
-            print("API Request Failed with Status Code:", response.status_code)
-    except Exception as e:
-        print("Error making API Request:", str(e))
+#     try:
+#         response = requests.post(api_url, headers=headers, json=data)
+#         if response.status_code == 200:
+#             # API request was successful
+#             api_response = response.json()
+#             # Process the API response as needed
+#             print("API Response:", api_response)
+#         else:
+#             print("API Request Failed with Status Code:", response.status_code)
+#     except Exception as e:
+#         print("Error making API Request:", str(e))
 
-# Main Kivy app code
-if __name__ == '__main__':
-    # Read data from Arduino
-    arduino_data = read_arduino_data()
+# # Main Kivy app code
+# if __name__ == '__main__':
+#     # Read data from Arduino
+#     arduino_data = read_arduino_data()
     
-    # Use the Arduino data to interact with the API
-    send_api_request(arduino_data)
+#     # Use the Arduino data to interact with the API
+#     send_api_request(arduino_data)
 
-    # Rest of your Kivy app code
+#     # Rest of your Kivy app code
 
 class MainApp(App):
     def build(self):

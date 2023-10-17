@@ -7,7 +7,7 @@ from kivy.uix.button import Button
 import requests
 
 # Define the URL of your Arduino server
-arduino_server_url = 'http://your_arduino_ip:your_port'
+webhook_url = 'http://your_arduino_ip:your_port/webhook'
 
 class ServoControlApp(App):
     def build(self):
@@ -28,11 +28,12 @@ class ServoControlApp(App):
 
     def on_slider_change(self, instance, value):
         self.label.text = f'Rotation: {int(value)}'
+        self.send_rotation_data()
 
     def send_rotation_data(self, instance):
         rotation = self.slider.value
         data = {'servo_position': rotation}
-        response = requests.post(arduino_server_url, json=data)
+        response = requests.post(webhook_url, json=data)
         if response.status_code == 200:
             print('Data sent successfully')
         else:
@@ -40,3 +41,4 @@ class ServoControlApp(App):
 
 if __name__ == '__main__':
     ServoControlApp().run()
+    
