@@ -3,6 +3,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.slider import Slider
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+from kivy.uix.image import Image
 from kivy.utils import get_color_from_hex
 
 import requests
@@ -35,10 +36,9 @@ class ServoControlApp(App):
 
         return layout
 
-    def on_slider_change(self, instance, value):
+    def on_slider_change(self, value):
         self.label.text = f'Rotation: {int(value)}'
         self.send_rotation_data(int(value))
-        
         self.user_active = True
 
         if self.user_active:
