@@ -8,7 +8,6 @@ from kivy.utils import get_color_from_hex
 
 import requests
 
-# Define the URL of your Arduino server
 webhook_url = 'http://your_arduino_ip:your_port/webhook'
 
 class ServoControlApp(App):
@@ -16,21 +15,21 @@ class ServoControlApp(App):
         layout = BoxLayout(orientation='vertical', padding = 20, spacing = 20, size_hint =(None, None))
         layout.width = 300
         layout.height = 300
-        background = Image(source='sun.jpg')
+        # background = Image(source='sun.jpg')
 
         self.label = Label(text='Control the Servos', size_hint = (None, None), size = (300, 50), halign = 'center')
         self.slider = Slider(min=0, max=180, value=90, step = 1, size_hint = (None, None), size = (300, 50))
-        self.reset_button = Button(text = 'Reset Louvers', size_hint = (None, None), size = (300, 50), background_color = get_color_from_hex('#FF0000'))
+        self.reset_button = Button(text = 'Reset Louvers', size_hint = (None, None), size = (300, 50), background_color =get_color_from_hex('#FF0000'))
 
         self.slider.bind(value=self.on_slider_change)
         self.reset_button.bind(on_press = self.reset_louvers)
 
-        background = Image(source='background.jpg')
+        # background = Image(source='background.jpg')
 
         layout.add_widget(self.label)
         layout.add_widget(self.slider)
         layout.add_widget(self.reset_button)
-        layout.add_widget(background)
+        # layout.add_widget(background)
 
         self.user_active = False
 
@@ -59,10 +58,14 @@ class ServoControlApp(App):
         self.user_active = False
 
     def reset_louvers(self):
+        # reset_button = Button(text = 'Reset Louvers') 
+        # reset_button.bind(on_bind = self.slider.value = 90)
         self.slider.value = 90
 
 if __name__ == '__main__':
     ServoControlApp().run()
 
-#modify UI
 
+
+
+#manual mode <-> automatic mode(tells the user what the angle of the current louvers)
