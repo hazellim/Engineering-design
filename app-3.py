@@ -9,10 +9,10 @@ from kivy.clock import Clock
 import requests
 import aiohttp
 
-arduino_port = '60000'
-arduino_ip = '192.168.0.184'
-webhook = 'solar_guardian'
-webhook_url = f'http://{arduino_ip}:{arduino_port}/{webhook}'
+# arduino_port = '60000'
+# arduino_ip = '192.168.0.184'
+# webhook = 'solar_guardian'
+webhook_url = 'http://192.168.0.184:60000/solar_guardian'
 api_key = '49149c3c44b44dd269d4ccd896fba3f6'
 city = 'Eindhoven' 
 
@@ -45,7 +45,7 @@ class ServoControlApp(MDApp):
             theme_text_color='Primary'
         )
 
-        self.slider = Slider(min=0, max=180, value=90, step=1, size_hint=(None, None), size=(800, 50), pos_hint={'x': 0.1, 'top': 0.8})
+        self.slider = Slider(min=0, max=90, value=0, step=1, size_hint=(None, None), size=(800, 50), pos_hint={'x': 0.1, 'top': 0.8})
         self.reset_button = Button(text='Reset Louvers', size_hint=(None, None), size=(300, 50), background_color=get_color_from_hex('#FF0000'), pos_hint={'x': 0.35, 'top': 0.2})
         self.fetch_weather_data()
 
@@ -81,8 +81,8 @@ class ServoControlApp(MDApp):
         self.user_active = False
 
     def reset_louvers(self, instance):
-        self.slider.value = 90
-        Clock.schedule_once(lambda dt: self.send_rotation_data(90))
+        self.slider.value = 0
+        Clock.schedule_once(lambda dt: self.send_rotation_data(0))
 
     def fetch_weather_data(self):
         try:
@@ -104,3 +104,13 @@ if __name__ == '__main__':
     from kivy import require
     require('2.0.0')
     ServoControlApp().run()
+
+
+# url = 'http://192.168.0.184:60000/solar_guardian'
+# data = {'servo_position': 0}
+
+# response = requests.post(url, json=data)
+# if response.status_code == 200:
+#     print('Request sent successfully')
+# else:
+#     print(f'Failed to send request. Status code: {response.status_code}')
