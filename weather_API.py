@@ -1,13 +1,6 @@
 import datetime as dt
 import requests
 
-# base_url = 'https://api.openweathermap.org/data/2.5/weather?'
-# api_key = open('49149c3c44b44dd269d4ccd896fba3f6', 'r').read()
-# city = 'Eindhoven'
-# url = base_url + 'app_id = ' + api_key + '&q=' + city
-# response = requests.get(url).json()
-# print(response)
-
 api_key = '49149c3c44b44dd269d4ccd896fba3f6'
 
 user_input = input('Enter city: ')
