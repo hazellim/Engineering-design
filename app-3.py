@@ -1,7 +1,7 @@
-from kivy.app import App
+from kivymd.app import MDApp
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.slider import Slider
-from kivy.uix.label import Label
+from kivymd.uix.label import MDLabel, MDIcon
 from kivy.uix.button import Button
 from kivy.uix.image import AsyncImage
 from kivy.utils import get_color_from_hex
@@ -16,7 +16,7 @@ webhook_url = f'http://{arduino_ip}:{arduino_port}/{webhook}'
 api_key = '49149c3c44b44dd269d4ccd896fba3f6'
 city = 'Eindhoven' 
 
-class ServoControlApp(App):
+class ServoControlApp(MDApp):
     def build(self):
         layout = FloatLayout()
         
@@ -26,20 +26,23 @@ class ServoControlApp(App):
             keep_ratio=True)
         layout.add_widget(background)
         
-        self.label = Label(text='Adjust The Angles', 
-                           size_hint=(None, None), 
-                           size=(400, 150), 
-                           halign='center', 
-                           pos_hint={'x': 0.3, 'top': 0.95},
-                           color = (0,0,0,1)
+        self.label = MDLabel(
+            text='Adjust The Angles', 
+            size_hint=(None, None), 
+            size=(400, 150), 
+            halign='center', 
+            pos_hint={'x': 0.3, 'top': 0.95},
+            theme_text_color='Primary',
+            font_style='H6'
         )
 
-        self.weather_label = Label( 
+        self.weather_label = MDLabel(
             text='Fetching weather...',
             size_hint=(None, None),
             size=(400, 50),
             halign='center',
-            pos_hint={'x': 0.3, 'top': 0.7}
+            pos_hint={'x': 0.3, 'top': 0.7},
+            theme_text_color='Primary'
         )
 
         self.slider = Slider(min=0, max=180, value=90, step=1, size_hint=(None, None), size=(800, 50), pos_hint={'x': 0.1, 'top': 0.8})
@@ -50,9 +53,9 @@ class ServoControlApp(App):
         self.slider.bind(value=self.on_slider_change)
 
         layout.add_widget(self.label)
+        layout.add_widget(self.weather_label)
         layout.add_widget(self.slider)
         layout.add_widget(self.reset_button)
-        layout.add_widget(self.weather_label)
 
         self.user_active = False
 
@@ -84,16 +87,17 @@ class ServoControlApp(App):
     def fetch_weather_data(self):
         try:
             weather_data = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={api_key}')
-            if weather_data.json().get('cod') == 200:
-                weather = weather_data.json()['weather'][0]['main']
-                temp = round(weather_data.json()['main']['temp'])
-                temp_min = round(weather_data.json()['main']['temp_min'])
-                temp_max = round(weather_data.json()['main']['temp_max'])
+            if weather_data.status_code == 200:
+                weather_json = weather_data.json()
+                weather = weather_json['weather'][0]['main']
+                temp = round(weather_json['main']['temp'])
+                temp_min = round(weather_json['main']['temp_min'])
+                temp_max = round(weather_json['main']['temp_max'])
                 self.weather_label.text = f'Weather: {weather}, Temp: {temp}°C (Min: {temp_min}°C, Max: {temp_max}°C)'
             else:
                 self.weather_label.text = 'No city found'
         except Exception as e:
-            self.weather_label.text = 'Error fetching weather'
+            self.weather_label.text = f'Error: {e}'
 
 if __name__ == '__main__':
     import aiohttp
