@@ -5,8 +5,8 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.image import AsyncImage
 from kivy.utils import get_color_from_hex
+from kivy.clock import Clock
 import aiohttp
-import asyncio
 
 arduino_port = '60000'
 arduino_ip = '192.168.0.184'
@@ -21,9 +21,9 @@ class ServoControlApp(App):
         self.label = Label(text='Adjust The Angles', size_hint=(None, None), size=(300, 50), halign='center')
         self.slider = Slider(min=0, max=180, value=90, step=1, size_hint=(None, None), size=(800, 50))
         self.reset_button = Button(text='Reset Louvers', size_hint=(None, None), size=(300, 50), background_color=get_color_from_hex('#FF0000'))
-
-        self.slider.bind(value=self.on_slider_change)
+        
         self.reset_button.bind(on_press=self.reset_louvers)
+        self.slider.bind(value=self.on_slider_change)
 
         background = AsyncImage(source='https://img.freepik.com/free-photo/white-cloud-blue-sky_74190-7709.jpg?size=626&ext=jpg&ga=GA1.1.386372595.1697846400&semt=sph',
                                 allow_stretch=True,
@@ -39,12 +39,8 @@ class ServoControlApp(App):
         return layout
 
     def on_slider_change(self, instance, value):
-        try:
-            self.label.text = f'Rotation: {int(value)}'
-            self.send_rotation_data(int(value))
-            self.user_active = True
-        except Exception as e:
-            print(f'Error: {e}')
+        self.label.text = f'Rotation: {int(value)}'
+        Clock.schedule_once(lambda dt: self.send_rotation_data(int(value)))
 
     async def send_rotation_data(self, rotation):
         data = {'servo_position': rotation}
@@ -61,8 +57,11 @@ class ServoControlApp(App):
     def on_pause(self):
         self.user_active = False
 
-    def reset_louvers(self):
+    def reset_louvers(self, instance):
+        print('reset button pressed')
+        data = {'servo_position': 90}
         self.slider.value = 90
+        Clock.schedule_once(lambda dt: self.send_rotation_data(90))
 
 if __name__ == '__main__':
     ServoControlApp().run()
