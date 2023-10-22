@@ -93,7 +93,8 @@ class ServoControlApp(MDApp):
                 temp = round(weather_json['main']['temp'])
                 temp_min = round(weather_json['main']['temp_min'])
                 temp_max = round(weather_json['main']['temp_max'])
-                self.weather_label.text = f'Weather: {weather}, Temp: {temp}°C (Min: {temp_min}°C, Max: {temp_max}°C)'
+                clouds = round(weather_json['clouds']['all'])
+                self.weather_label.text = f'Weather: {weather}, Temp: {temp}°C (Min: {temp_min}°C, Max: {temp_max}°C), Cloudiness: {clouds}%'
             else:
                 self.weather_label.text = 'No city found'
         except Exception as e:
